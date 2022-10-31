@@ -22,6 +22,12 @@ router.post(
 router.post("/sign-out", isAuth, (req, res) => {
   adminController.signOut(req, res);
 });
+router.post("/upload-prescription", (req, res) => {
+  adminController.uploadPrescription(req, res);
+});
+router.post("/upcoming-appointments", (req, res) => {
+  adminController.upcomingAppointment(req, res);
+});
 
 
 module.exports = router;

@@ -92,6 +92,14 @@ const signOut = async (req, res) => {
   }
 };
 
+const uploadPrescription = async (req, res) => {
+
+}
+
+
+const upcomingAppointment = async (req, res) => {
+
+}
 
 
 
@@ -99,4 +107,6 @@ module.exports = {
   createDoc,
   docSignIn,
   signOut,
+  uploadPrescription,
+  upcomingAppointment
 };
