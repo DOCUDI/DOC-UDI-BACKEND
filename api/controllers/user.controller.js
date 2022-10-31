@@ -6,8 +6,8 @@ require("dotenv").config();
 // creating new user
 const createUser = async (req, res) => {
   console.log("hi");
-  const { name, email, password } = req.body;
-  const medicalHistory = [];
+  const { name, email, password, medicalHistory } = req.body;
+  // const medicalHistory = [];
   const isNewUser = await User.isThisEmailInUse(email);
   if (!isNewUser)
     return res.json({
@@ -65,10 +65,10 @@ const userSignIn = async (req, res) => {
   const userInfo = {
     fullname: user.name,
     email: user.email,
-    score: user.score,
   };
+  const userID = user._id;
 
-  res.json({ success: true, user: userInfo, token });
+  res.json({ success: true, user: userInfo, id: userID, token });
 };
 
 // user sign-out
@@ -110,15 +110,34 @@ const bookAppointment = async (req, res) => {
 //see previous appointments
 //from User model
 const previousAppointments = async (req, res) => {
-  // const { id } = req.body;
-  // const user = await User.findById({});
-  // res.json({ success: true, user })
+  const id = req.body.patientID;
+  User.findById(id, (err, prevAppointments) => {
+    if(err){
+      console.log(err);
+      res.json({ success: false, message: "error in finding prev appointments" });
+    }
+    else{
+      console.log("prev appointments of patient given")
+      const medicalHistory = prevAppointments.medicalHistory;
+      res.json({ success: true, medicalHistory });
+    }
+  })
 };
 
 //see upcoming appointments
 //from appointments model
 const upcomingAppointments = async (req, res) => {
-  
+  const pid = req.body.id;
+  Appointment.find({ PatientID: pid }, (err, upAppointments) => {
+    if(upAppointments.length === 0 || err){
+      console.log(err);
+      res.json({ success: false, message: "error in finding upcoming appointments" });
+    }
+    else{
+      console.log("upcoming appointments of patient given");
+      res.json({ success: true, upAppointments });
+    }
+  })
 };
 
 //start an appointment
