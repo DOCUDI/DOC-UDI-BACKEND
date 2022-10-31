@@ -22,6 +22,9 @@ router.post(
 router.post("/sign-out", isAuth, (req, res) => {
   adminController.signOut(req, res);
 });
+router.get("/get-docs", (req, res) => {
+  adminController.getAllDoctors(req, res);
+});
 
 
 module.exports = router;

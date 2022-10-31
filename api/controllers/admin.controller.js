@@ -92,9 +92,23 @@ const signOut = async (req, res) => {
   }
 };
 
+//get all doctor list
+const getAllDoctors = async (req, res) => {
+  Doc.find((err,docs)=>{
+    if(err)
+        console.log(err);
+    else{
+      console.log("all docs given")
+      res.json({ success: true, docs });
+    }
+  }); 
+  
+}
+
 
 module.exports = {
   createDoc,
   docSignIn,
   signOut,
+  getAllDoctors,
 };
