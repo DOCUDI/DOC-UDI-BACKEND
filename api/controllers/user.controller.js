@@ -128,7 +128,7 @@ const previousAppointments = async (req, res) => {
 //from appointments model
 const upcomingAppointments = async (req, res) => {
   const pid = req.body.id;
-  Appointment.find({ PatientID: pid }, (err, upAppointments) => {
+  await Appointment.find({ patientID: pid }, (err, upAppointments) => {
     if(upAppointments.length === 0 || err){
       console.log(err);
       res.json({ success: false, message: "error in finding upcoming appointments" });

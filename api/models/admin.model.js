@@ -30,6 +30,9 @@ let DocSchema = mongoose.Schema({
   },
   //time slots will be a pair of from-to
   time_slots: [{
+    _id: {
+      type: String,
+    },
     startTime:{
       type: String,
     },
