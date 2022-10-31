@@ -32,11 +32,9 @@ let DocSchema = mongoose.Schema({
   time_slots: [{
     startTime:{
       type: String,
-      required: true
     },
     endTime:{
       type: String,
-      required: true
     }
   }],
   consultation_fee: {
