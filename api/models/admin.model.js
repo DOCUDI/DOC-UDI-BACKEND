@@ -23,15 +23,28 @@ let DocSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  time_slots: [{
+  //added city since needed for search in app
+  city: {
     type: String,
+    required: true,
+  },
+  //time slots will be a pair of from-to
+  time_slots: [{
+    startTime:{
+      type: String,
+      required: true
+    },
+    endTime:{
+      type: String,
+      required: true
+    }
   }],
   consultation_fee: {
     type: String,
     required: true,
   },
   working_days: [{
-    type: String,
+    type: String
   }],
   tokens: [{ type: Object }],
   isAdmin: Boolean,

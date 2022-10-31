@@ -5,7 +5,7 @@ const { Doc } = require("../models");
 // creating new admin
 const createDoc = async (req, res) => {
   console.log("helo");
-  const { name, email, password, clinic_address, specialization, time_slots, consultation_fee, working_days } = req.body;
+  const { name, email, password, clinic_address, specialization, city, time_slots, consultation_fee, working_days } = req.body;
   const isNewUser = await Doc.isThisEmailInUse(email);
   if (!isNewUser)
     return res.json({
@@ -18,6 +18,7 @@ const createDoc = async (req, res) => {
     password,
     clinic_address,
     specialization,
+    city,
     time_slots,
     consultation_fee,
     working_days
@@ -91,20 +92,6 @@ const signOut = async (req, res) => {
   }
 };
 
-const pushMeal = async (req, res) => {
-  try {
-    const meal = new Meal({
-      _id: new mongoose.Types.ObjectId(),
-      range: req.body.range,
-      dietPlan: req.body.dietPlan,
-      exercisePlan: req.body.exercisePlan,
-    });
-    meal.save();
-    res.json({ success: true, message: "Meal added successfully!" });
-  } catch (e) {
-    res.json({ success: false, message: "Meal adding failed!" });
-  }
-};
 
 module.exports = {
   createDoc,

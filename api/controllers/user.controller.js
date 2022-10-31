@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { User } = require("../models");
+const { User, Appointment } = require("../models");
 
 require("dotenv").config();
 
@@ -7,6 +7,7 @@ require("dotenv").config();
 const createUser = async (req, res) => {
   console.log("hi");
   const { name, email, password } = req.body;
+  const medicalHistory = [];
   const isNewUser = await User.isThisEmailInUse(email);
   if (!isNewUser)
     return res.json({
@@ -17,6 +18,7 @@ const createUser = async (req, res) => {
     name,
     email,
     password,
+    medicalHistory,
   });
   await user.save();
   res.json({ success: true, user });
@@ -88,9 +90,48 @@ const signOut = async (req, res) => {
   }
 };
 
+//book appointment
+const bookAppointment = async (req, res) => {
+  const { docName, docID, specialization, patientName, patientID, date, time_slot } = req.body;
+  const appointment = await Appointment({
+    docName, 
+    docID, 
+    specialization, 
+    patientName, 
+    patientID, 
+    date, 
+    time_slot
+  });
+  await appointment.save();
+  res.json({ success: true, appointment });
+  
+}
+
+//see previous appointments
+//from User model
+const previousAppointments = async (req, res) => {
+  const user = await User.findById();
+  console.log(user);
+}
+
+//see upcoming appointments
+//from appointments model
+const upcomingAppointments = async (req, res) => {
+  
+}
+
+//start an appointment
+const startAppointment = async (req, res) => {
+  
+}
+
 
 module.exports = {
   createUser,
   userSignIn,
   signOut,
+  bookAppointment,
+  previousAppointments,
+  upcomingAppointments,
+  startAppointment
 };
