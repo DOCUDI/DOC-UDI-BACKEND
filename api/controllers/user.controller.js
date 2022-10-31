@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { User, Appointment } = require("../models");
+const { User, Appointment, Doc } = require("../models");
 
 require("dotenv").config();
 
@@ -110,20 +110,52 @@ const bookAppointment = async (req, res) => {
 //see previous appointments
 //from User model
 const previousAppointments = async (req, res) => {
-  const user = await User.findById();
-  console.log(user);
-}
+  // const { id } = req.body;
+  // const user = await User.findById({});
+  // res.json({ success: true, user })
+};
 
 //see upcoming appointments
 //from appointments model
 const upcomingAppointments = async (req, res) => {
   
-}
+};
 
 //start an appointment
 const startAppointment = async (req, res) => {
   
-}
+};
+
+const getDoctorBySpecialization = async (req, res) => {
+  const specialization = req.body.specialization;
+  Doc.find({ specialization }, (err, docs) => {
+    if(err){
+      console.log(err);
+      res.json({ success: false, message: "error in finding doctors" });
+    }
+    else{
+      console.log("docs given according to specialization")
+      res.json({ success: true, docs });
+    }
+  });
+
+
+};
+
+//get all doctor list
+const getAllDoctors = async (req, res) => {
+  Doc.find((err,docs)=>{
+    if(err){
+        console.log(err);
+        res.json({ success: false, message: "error in finding doctors" });
+    }
+    else{
+      console.log("all docs given")
+      res.json({ success: true, docs });
+    }
+  }); 
+  
+};
 
 
 module.exports = {
@@ -133,5 +165,7 @@ module.exports = {
   bookAppointment,
   previousAppointments,
   upcomingAppointments,
-  startAppointment
+  startAppointment,
+  getDoctorBySpecialization,
+  getAllDoctors
 };

@@ -17,9 +17,14 @@ const userSchema = new mongoose.Schema({
   },
   medicalHistory: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      comments: String,
-      date: String
+      docName: String,
+      specialization: String,
+      clinicAddress: String,
+      patientName: String,
+      date: String,
+      time: String,
+      fees: String,
+      prescription: String
     },
   ],
   tokens: [{ type: Object }],
