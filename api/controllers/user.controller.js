@@ -145,7 +145,44 @@ const upcomingAppointments = async (req, res) => {
 
 //start an appointment
 const startAppointment = async (req, res) => {
+  const { docID, patientName, patientID, date, time_slot } = req.body;
+  let currentAppointment = []
+
+  await Doc.findById(docID, (err, docData) => {
+    if(!docData || err){
+      console.log(err);
+      res.json({ success: false, message: "error while finding doctor" });
+      return;
+    }
+    else{
+      console.log("doctor found");
+      currentAppointment = docData.currentAppointment;
+      console.log(currentAppointment);
+    }
+  });
+
+  const newAppointment = {
+    patientName,
+    patientID,
+    date,
+    time_slot
+  };
+
+  currentAppointment.push(newAppointment);
+
+  await Doc.updateOne({ _id: docID }, { currentAppointment }, (err, upDoc) => {
+    if(!upDoc || err){
+      console.log(err);
+      res.json({ success: false, message: "error while updating doctor's currentAppointment array" });
+    }
+    else{
+      console.log(upDoc);
+    }
+  });
   
+  res.json({ success: true, newAppointment });
+
+
 };
 
 const getDoctorBySpecialization = async (req, res) => {

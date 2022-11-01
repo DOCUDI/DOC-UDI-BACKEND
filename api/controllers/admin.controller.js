@@ -189,12 +189,33 @@ const upcomingAppointment = async (req, res) => {
 
 //start appointment
 const startAppointment = async (req, res) => {
-  
+  const id = req.body.id;
+  await Doc.findById(id, (err, doc) => {
+    if(!doc || err){
+      console.log(err);
+      res.json({ success: false, message: "error in finding doctor" });
+    }
+    else{
+      const currentAppointment = doc.currentAppointment;
+      res.json({ success: true, currentAppointment });
+    }
+  })
 }
 
 //give patient's medical history
 const patientMedicalHistory = async (req, res) => {
-  
+  const id = req.body.patientID;
+  User.findById(id, (err, prevAppointments) => {
+    if(!prevAppointments || err){
+      console.log(err);
+      res.json({ success: false, message: "error in finding medical history" });
+    }
+    else{
+      console.log("medical history of patient given")
+      const medicalHistory = prevAppointments.medicalHistory;
+      res.json({ success: true, medicalHistory });
+    }
+  })
 }
 
 
