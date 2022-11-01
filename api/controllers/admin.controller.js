@@ -70,7 +70,7 @@ const docSignIn = async (req, res) => {
     email: user.email,
   };
 
-  res.json({ success: true, user: userInfo, token });
+  res.json({ success: true, user });
 };
 
 // sign-out route for admin
@@ -135,7 +135,7 @@ const uploadPrescription = async (req, res) => {
 //get upcoming appointments for doctor to take
 const upcomingAppointment = async (req, res) => {
   const pid = req.body.id;
-  await Appointment.find({ patientID: pid }, (err, upAppointments) => {
+  await Appointment.find({ docID: pid }, (err, upAppointments) => {
     if(upAppointments.length === 0 || err){
       console.log(err);
       res.json({ success: false, message: "error in finding upcoming appointments" });
