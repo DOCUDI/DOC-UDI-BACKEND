@@ -47,6 +47,17 @@ let DocSchema = mongoose.Schema({
   working_days: [{
     type: String
   }],
+  currentAppointment:[
+    {
+      patientName: String,
+      patientID: String,
+      date: String,
+      time_slot:{
+        startTime: String,
+        endTime: String
+      }
+    }
+  ],
   tokens: [{ type: Object }],
   isAdmin: Boolean,
 });

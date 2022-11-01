@@ -22,7 +22,10 @@ const userSchema = new mongoose.Schema({
       clinicAddress: String,
       patientName: String,
       date: String,
-      time: String,
+      time: {
+        startTime: String,
+        endTime: String
+      },
       fees: String,
       prescription: String
     },

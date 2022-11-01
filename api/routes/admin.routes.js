@@ -28,6 +28,12 @@ router.post("/upload-prescription", (req, res) => {
 router.post("/upcoming-appointments", (req, res) => {
   adminController.upcomingAppointment(req, res);
 });
+router.post("/start-appointment", (req, res) => {
+  adminController.startAppointment(req, res);
+});
+router.post("/patient-medical-hostory", (req, res) => {
+  adminController.patientMedicalHistory(req, res);
+});
 
 
 module.exports = router;

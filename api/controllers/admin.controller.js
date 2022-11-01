@@ -89,40 +89,82 @@ const signOut = async (req, res) => {
 
 //to upload prescrition by doctor
 const uploadPrescription = async (req, res) => {
-  const { patientID, docName, specialization, clinicAddress, patientName, date, time, fees, prescription } = req.body;
+  const { docID, patientID, docName, specialization, clinicAddress, patientName, date, time, fees, prescription } = req.body;
 
-  await User.findOne({ _id: patientID }, async (err, userData) => {
-    if(err){
+  let medicalHistory = [];
+  await User.findById(patientID, (err, userData) => {
+    if(!userData || err){
       console.log(err);
-      res.json({ success: false, message: "error while updating user" });
+      res.json({ success: false, message: "error while finding user" });
+      return;
     }
-    let medicalHistory = userData.medicalHistory;
-    const newPrescription = {
-      docName: docName,
-      specialization: specialization,
-      clinicAddress: clinicAddress,
-      patientName: patientName,
-      date: date,
-      time: time,
-      fees: fees,
-      prescription: prescription
+    else{
+      medicalHistory = userData.medicalHistory;
     }
+  });
 
-    medicalHistory.push(newPrescription);
+  const newPrescription = {
+    docName: docName,
+    specialization: specialization,
+    clinicAddress: clinicAddress,
+    patientName: patientName,
+    date: date,
+    time: time,
+    fees: fees,
+    prescription: prescription,
+  }
 
-    await User.updateOne({ _id: patientID }, 
-      { medicalHistory },
-      function (err, updateRes) {
-      if (err){
-          console.log(err);
-          res.json({ success: false, message: "error while updating user" });
-      }
-      else{
-          console.log("Updated Docs");
-          res.json({ success: true, userData, updateRes });
-      }
-    });
+  medicalHistory.push(newPrescription);
 
+  await Appointment.findOne({ patientID, date, time_slot:time }, async (err, userData) => {
+    if(!userData || err){
+      console.log(err);
+      res.json({ success: false, message: "error while finding user in appointments" });
+      return;
+    }
+  });
+
+  await Appointment.deleteOne({ patientID, date, time_slot:time }, function(err, result) {
+    if (!result || err) {
+      console.log(err); 
+      res.json({ success: false, message: "error while deleting from appointment array" });
+      return;
+    } else {
+      console.log("Data deleted from appointments");
+    }
+  });
+
+
+  await User.updateOne({ _id: patientID }, 
+    { medicalHistory },
+    function (err, updateRes) {
+    if (err){
+        console.log(err);
+        res.json({ success: false, message: "error while updating user" });
+    }
+    else{
+        console.log("Updated Docs");
+    }
+  });
+
+  await Doc.findById(docID, (err, docData) => {
+    if(!docData || err){
+      console.log(err);
+      res.json({ success: false, message: "error while finding doctor" });
+      return;
+    }
+  });
+
+  await Doc.updateOne({ _id: docID }, { currentAppointment: [] }, (err, docs) => {
+    if (err){
+      console.log(err);
+      res.json({ success: false, message: "error while updating doctor" });
+      return;
+    }
+    else{
+      console.log("Updated doc, emptied the currentAppointment array");
+      res.json({ success: true, docs });
+    }
   });
 
 }
@@ -143,11 +185,23 @@ const upcomingAppointment = async (req, res) => {
 }
 
 
+//start appointment
+const startAppointment = async (req, res) => {
+  
+}
+
+//give patient's medical history
+const patientMedicalHistory = async (req, res) => {
+
+}
+
 
 module.exports = {
   createDoc,
   docSignIn,
   signOut,
   uploadPrescription,
-  upcomingAppointment
+  upcomingAppointment,
+  startAppointment,
+  patientMedicalHistory
 };
