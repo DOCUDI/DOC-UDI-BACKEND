@@ -147,7 +147,7 @@ const startAppointment = async (req, res) => {
 
 const getDoctorBySpecialization = async (req, res) => {
   const specialization = req.body.specialization;
-  Doc.find({ specialization }, (err, docs) => {
+  await Doc.find({ specialization }, (err, docs) => {
     if(err){
       console.log(err);
       res.json({ success: false, message: "error in finding doctors" });
@@ -163,7 +163,7 @@ const getDoctorBySpecialization = async (req, res) => {
 
 //get all doctor list
 const getAllDoctors = async (req, res) => {
-  Doc.find((err,docs)=>{
+  await Doc.find((err,docs)=>{
     if(err){
         console.log(err);
         res.json({ success: false, message: "error in finding doctors" });

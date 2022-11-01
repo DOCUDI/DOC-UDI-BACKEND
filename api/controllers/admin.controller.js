@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
-const { Doc } = require("../models");
+const { User, Doc, Appointment } = require("../models");
 
 // creating new admin
 const createDoc = async (req, res) => {
@@ -92,13 +92,59 @@ const signOut = async (req, res) => {
   }
 };
 
+//to upload prescrition by doctor
 const uploadPrescription = async (req, res) => {
+  const { patientID, docName, specialization, clinicAddress, patientName, date, time, fees, prescription } = req.body;
+
+  await User.findOne({ _id: patientID }, async (err, userData) => {
+    if(err){
+      console.log(err);
+      res.json({ success: false, message: "error while updating user" });
+    }
+    let medicalHistory = userData.medicalHistory;
+    const newPrescription = {
+      docName: docName,
+      specialization: specialization,
+      clinicAddress: clinicAddress,
+      patientName: patientName,
+      date: date,
+      time: time,
+      fees: fees,
+      prescription: prescription
+    }
+
+    medicalHistory.push(newPrescription);
+
+    await User.updateOne({ _id: patientID }, 
+      { medicalHistory },
+      function (err, updateRes) {
+      if (err){
+          console.log(err);
+          res.json({ success: false, message: "error while updating user" });
+      }
+      else{
+          console.log("Updated Docs");
+          res.json({ success: true, userData, updateRes });
+      }
+    });
+
+  });
 
 }
 
-
+//get upcoming appointments for doctor to take
 const upcomingAppointment = async (req, res) => {
-
+  const pid = req.body.id;
+  await Appointment.find({ patientID: pid }, (err, upAppointments) => {
+    if(upAppointments.length === 0 || err){
+      console.log(err);
+      res.json({ success: false, message: "error in finding upcoming appointments" });
+    }
+    else{
+      console.log("upcoming appointments of patient given");
+      res.json({ success: true, upAppointments });
+    }
+  })
 }
 
 
