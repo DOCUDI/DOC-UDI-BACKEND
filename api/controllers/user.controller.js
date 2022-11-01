@@ -112,7 +112,7 @@ const bookAppointment = async (req, res) => {
 const previousAppointments = async (req, res) => {
   const id = req.body.patientID;
   User.findById(id, (err, prevAppointments) => {
-    if(err){
+    if(!prevAppointments || err){
       console.log(err);
       res.json({ success: false, message: "error in finding prev appointments" });
     }
@@ -142,25 +142,7 @@ const upcomingAppointments = async (req, res) => {
 
 //start an appointment
 const startAppointment = async (req, res) => {
-  const { patientID, time_slot } = req.body;
-  await Appointment.findOne({ patientID, time_slot }, async (err, currentAppointment) =>{
-    if(!currentAppointment || err){
-      console.log(err);
-      res.json({ success: false, message: "error in starting appointment" });
-    }
-    else{
-      console.log("appointment started");
   
-      await Appointment.deleteOne({ patientID, time_slot }).then(() => {
-        console.log("Data deleted"); 
-      }).catch(error => {
-        console.log(error);
-        res.json({ success: false, message: "error in deleting appointment" });
-      });
-
-      res.json({ success: true, currentAppointment });
-    }
-  })
 };
 
 const getDoctorBySpecialization = async (req, res) => {
