@@ -4,7 +4,8 @@ const { User, Doc, Appointment } = require("../models");
 
 // creating new admin
 const createDoc = async (req, res) => {
-  console.log("helo");
+  console.log("in createDoc");
+  const currentAppointment = [];
   const { name, email, password, clinic_address, specialization, city, time_slots, consultation_fee, working_days } = req.body;
   const isNewUser = await Doc.isThisEmailInUse(email);
   if (!isNewUser)
@@ -21,7 +22,8 @@ const createDoc = async (req, res) => {
     city,
     time_slots,
     consultation_fee,
-    working_days
+    working_days,
+    currentAppointment
   });
   await user.save();
   res.json({ success: true, user });
@@ -192,7 +194,7 @@ const startAppointment = async (req, res) => {
 
 //give patient's medical history
 const patientMedicalHistory = async (req, res) => {
-
+  
 }
 
 

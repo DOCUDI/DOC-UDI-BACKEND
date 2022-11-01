@@ -5,7 +5,7 @@ require("dotenv").config();
 
 // creating new user
 const createUser = async (req, res) => {
-  console.log("hi");
+  console.log("in createUser");
   const medicalHistory = [];
   const { name, email, password } = req.body;
   const isNewUser = await User.isThisEmailInUse(email);
@@ -92,7 +92,7 @@ const signOut = async (req, res) => {
 
 //book appointment
 const bookAppointment = async (req, res) => {
-  const { docName, docID, specialization, patientName, patientID, date, time_slot } = req.body;
+  const { docName, docID, specialization, patientName, patientID, date, time_slot, symptoms, address, fees } = req.body;
   const appointment = await Appointment({
     docName, 
     docID, 
@@ -100,7 +100,10 @@ const bookAppointment = async (req, res) => {
     patientName, 
     patientID, 
     date, 
-    time_slot
+    time_slot,
+    symptoms,
+    address,
+    fees
   });
   await appointment.save();
   res.json({ success: true, appointment });

@@ -36,6 +36,15 @@ const AppointmentModel = mongoose.Schema(
         type: String,
         required: true
       }
+    },
+    symptoms:[ String ],
+    address: { 
+      type: String,
+      required: true
+    },
+    fees: {
+      type: String,
+      required: true
     }
   },
   { timestamps: true }
