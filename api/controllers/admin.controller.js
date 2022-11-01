@@ -65,12 +65,7 @@ const docSignIn = async (req, res) => {
     tokens: [...oldTokens, { token, signedAt: Date.now().toString() }],
   });
 
-  const userInfo = {
-    fullname: user.name,
-    email: user.email,
-  };
-
-  res.json({ success: true, user });
+  res.json({ success: true, user, token });
 };
 
 // sign-out route for admin
