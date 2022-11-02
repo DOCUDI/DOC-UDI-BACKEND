@@ -217,6 +217,24 @@ const getAllDoctors = async (req, res) => {
   
 };
 
+//return true if appointment ended else false
+const endAppointment = async (req, res) => {
+  const { patientID, date, time_slot } = req.body;
+  await Appointment.findOne({ patientID, date, time_slot },(err, appointment) =>{
+    console.log(appointment);
+    if(err){
+      console.log(err);
+      res.json({ success: false, message: "error in getting appointment" });
+    }
+    else if(!appointment){
+      res.json({ success: false });
+    }
+    else{
+      res.json({ success: true });
+    }
+  });
+}
+
 
 module.exports = {
   createUser,
@@ -227,5 +245,6 @@ module.exports = {
   upcomingAppointments,
   startAppointment,
   getDoctorBySpecialization,
-  getAllDoctors
+  getAllDoctors,
+  endAppointment
 };

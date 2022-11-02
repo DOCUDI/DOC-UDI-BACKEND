@@ -35,6 +35,9 @@ router.post("/get-doc-specialization", (req, res) => {
 router.get("/get-docs", (req, res) => {
   userController.getAllDoctors(req, res);
 });
+router.post("/end-appointment", (req, res) => {
+  userController.endAppointment(req, res);
+});
 
 
 module.exports = router;
