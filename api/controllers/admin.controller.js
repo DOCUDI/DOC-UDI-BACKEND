@@ -130,15 +130,18 @@ const uploadPrescription = async (req, res) => {
     }
   });
 
-  await Appointment.findOne({ patientID, date, time_slot:time }, async (err, userData) => {
+  await Appointment.findOne({ patientID, date, time_slot: time }, async (err, userData) => {
     if(!userData || err){
       console.log(err);
       res.json({ success: false, message: "error while finding user in appointments" });
       return;
+    } 
+    else{
+      console.log("appointment found to delete");
     }
   });
 
-  await Appointment.deleteOne({ patientID, date, time_slot:time }, function(err, result) {
+  await Appointment.deleteOne({ patientID, date, time_slot: time }, function(err, result) {
     if (!result || err) {
       console.log(err); 
       res.json({ success: false, message: "error while deleting from appointment array" });
