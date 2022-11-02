@@ -116,7 +116,8 @@ const uploadPrescription = async (req, res) => {
     prescription: prescription,
   }
 
-  medicalHistory.push(newPrescription);
+  // medicalHistory.push(newPrescription);
+  medicalHistory = [...medicalHistory, newPrescription];
 
   await User.updateOne({ _id: patientID }, 
     { medicalHistory },
