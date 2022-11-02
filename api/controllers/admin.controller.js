@@ -127,7 +127,6 @@ const uploadPrescription = async (req, res) => {
     }
     else{
         console.log("Updated user medical history");
-        res.json({ success: true });
     }
   });
 
