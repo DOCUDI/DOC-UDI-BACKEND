@@ -31,9 +31,7 @@ router.post("/upcoming-appointments", (req, res) => {
 router.post("/start-appointment", (req, res) => {
   adminController.startAppointment(req, res);
 });
-router.post("/patient-medical-history", (req, res) => {
-  adminController.patientMedicalHistory(req, res);
-});
+
 
 
 module.exports = router;

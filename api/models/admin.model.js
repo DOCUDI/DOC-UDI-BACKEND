@@ -55,7 +55,8 @@ let DocSchema = mongoose.Schema({
       time_slot:{
         startTime: String,
         endTime: String
-      }
+      },
+      symptoms: [ String ]
     }
   ],
   tokens: [{ type: Object }],

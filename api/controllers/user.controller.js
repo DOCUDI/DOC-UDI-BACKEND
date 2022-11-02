@@ -145,7 +145,7 @@ const upcomingAppointments = async (req, res) => {
 
 //start an appointment
 const startAppointment = async (req, res) => {
-  const { docID, patientName, patientID, date, time_slot } = req.body;
+  const { docID, patientName, patientID, date, time_slot, symptoms } = req.body;
   let currentAppointment = []
 
   await Doc.findById(docID, (err, docData) => {
@@ -165,7 +165,8 @@ const startAppointment = async (req, res) => {
     patientName,
     patientID,
     date,
-    time_slot
+    time_slot,
+    symptoms
   };
 
   currentAppointment.push(newAppointment);

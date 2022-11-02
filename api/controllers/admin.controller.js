@@ -26,7 +26,7 @@ const createDoc = async (req, res) => {
     currentAppointment
   });
   await user.save();
-  res.json({ success: true, user });
+  res.json({ success: true, user, password });
 };
 
 // sign-in new admin
@@ -188,24 +188,31 @@ const upcomingAppointment = async (req, res) => {
 
 
 //start appointment
+//and return patient history if found
 const startAppointment = async (req, res) => {
-  const id = req.body.id;
-  await Doc.findById(id, (err, doc) => {
+  const did = req.body.docID;
+  const currentAppointment = [];
+
+  await Doc.findById(did, (err, doc) => {
     if(!doc || err){
       console.log(err);
       res.json({ success: false, message: "error in finding doctor" });
     }
     else{
-      const currentAppointment = doc.currentAppointment;
-      res.json({ success: true, currentAppointment });
+      console.log("doctor found", doc.currentAppointment);
+      currentAppointment = doc.currentAppointment;
     }
-  })
-}
+  });
+  console.log(currentAppointment);
 
-//give patient's medical history
-const patientMedicalHistory = async (req, res) => {
-  const id = req.body.patientID;
-  User.findById(id, (err, prevAppointments) => {
+  if(currentAppointment.length === 0){
+    console.log("no current appointments");
+    res.json({ success: true, currentAppointment });
+  }
+
+  const pid = currentAppointment[1].patientID;
+
+  User.findById(pid, (err, prevAppointments) => {
     if(!prevAppointments || err){
       console.log(err);
       res.json({ success: false, message: "error in finding medical history" });
@@ -213,9 +220,10 @@ const patientMedicalHistory = async (req, res) => {
     else{
       console.log("medical history of patient given")
       const medicalHistory = prevAppointments.medicalHistory;
-      res.json({ success: true, medicalHistory });
+      res.json({ success: true, currentAppointment, medicalHistory });
     }
-  })
+  });
+
 }
 
 
@@ -226,5 +234,4 @@ module.exports = {
   uploadPrescription,
   upcomingAppointment,
   startAppointment,
-  patientMedicalHistory
 };
