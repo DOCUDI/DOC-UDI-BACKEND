@@ -118,6 +118,19 @@ const uploadPrescription = async (req, res) => {
 
   medicalHistory.push(newPrescription);
 
+  await User.updateOne({ _id: patientID }, 
+    { medicalHistory },
+    function (err, updateRes) {
+    if (err){
+        console.log(err);
+        res.json({ success: false, message: "error while updating user" });
+    }
+    else{
+        console.log("Updated user medical history");
+        res.json({ success: true });
+    }
+  });
+
   await Appointment.findOne({ patientID, date, time_slot:time }, async (err, userData) => {
     if(!userData || err){
       console.log(err);
@@ -136,18 +149,6 @@ const uploadPrescription = async (req, res) => {
     }
   });
 
-
-  await User.updateOne({ _id: patientID }, 
-    { medicalHistory },
-    function (err, updateRes) {
-    if (err){
-        console.log(err);
-        res.json({ success: false, message: "error while updating user" });
-    }
-    else{
-        console.log("Updated Docs");
-    }
-  });
 
   await Doc.findById(docID, (err, docData) => {
     if(!docData || err){
@@ -191,38 +192,46 @@ const upcomingAppointment = async (req, res) => {
 //and return patient history if found
 const startAppointment = async (req, res) => {
   const did = req.body.docID;
-  const currentAppointment = [];
+  let currentAppointment = [];
+  let temp = false;
 
   await Doc.findById(did, (err, doc) => {
     if(!doc || err){
       console.log(err);
       res.json({ success: false, message: "error in finding doctor" });
+      return;
     }
     else{
-      console.log("doctor found", doc.currentAppointment);
+      // console.log(doc);
+      temp = true;
       currentAppointment = doc.currentAppointment;
     }
   });
-  console.log(currentAppointment);
+  // console.log(currentAppointment);
 
   if(currentAppointment.length === 0){
-    console.log("no current appointments");
-    res.json({ success: true, currentAppointment });
+    if(temp){
+      console.log("no current appointments");
+      res.json({ success: true, currentAppointment });
+    }
+    return;
   }
 
-  const pid = currentAppointment[1].patientID;
+  else{
+    const pid = currentAppointment[0].patientID;
 
-  User.findById(pid, (err, prevAppointments) => {
-    if(!prevAppointments || err){
-      console.log(err);
-      res.json({ success: false, message: "error in finding medical history" });
-    }
-    else{
-      console.log("medical history of patient given")
-      const medicalHistory = prevAppointments.medicalHistory;
-      res.json({ success: true, currentAppointment, medicalHistory });
-    }
-  });
+    User.findById(pid, (err, prevAppointments) => {
+      if(!prevAppointments || err){
+        console.log(err);
+        res.json({ success: false, message: "error in finding medical history" });
+      }
+      else{
+        console.log("medical history of patient given")
+        const medicalHistory = prevAppointments.medicalHistory;
+        res.json({ success: true, currentAppointment, medicalHistory });
+      }
+    });
+  }
 
 }
 
