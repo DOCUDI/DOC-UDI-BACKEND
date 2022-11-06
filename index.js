@@ -12,7 +12,9 @@ const router = require('./api/routes');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,PATCH,OPTIONS');
+header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token, Authorization');
 
 const corsOptions ={
     origin:'http://localhost:3000', 
