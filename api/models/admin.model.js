@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 let DocSchema = mongoose.Schema({
   pfp: {
     type: String,
-    required: true
   },
   name: {
     type: String,

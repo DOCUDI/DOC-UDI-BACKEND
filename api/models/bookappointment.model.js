@@ -5,11 +5,9 @@ const AppointmentModel = mongoose.Schema(
   {
     DocPfp: {
       type: String,
-      required: true
     },
     patientPfp: {
       type: String,
-      required: true
     },
     docName: {
       type: String,
