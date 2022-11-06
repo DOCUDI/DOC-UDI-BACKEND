@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 //check time slot 
 const AppointmentModel = mongoose.Schema(
   {
-    DocPfp: {
+    docPfp: {
       type: String,
     },
     patientPfp: {

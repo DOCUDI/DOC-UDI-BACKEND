@@ -7,7 +7,7 @@ require("dotenv").config();
 const createUser = async (req, res) => {
   console.log("in createUser");
   const medicalHistory = [];
-  const { name, email, password } = req.body;
+  const { name, email, password, pfp } = req.body;
   const isNewUser = await User.isThisEmailInUse(email);
   if (!isNewUser)
     return res.json({
@@ -15,6 +15,7 @@ const createUser = async (req, res) => {
       message: "This email is already in use, try sign-in",
     });
   const user = await User({
+    pfp,
     name,
     email,
     password,
@@ -92,8 +93,10 @@ const signOut = async (req, res) => {
 
 //book appointment
 const bookAppointment = async (req, res) => {
-  const { docName, docID, specialization, patientName, patientID, date, time_slot, symptoms, address, fees } = req.body;
+  const { docPfp, patientPfp, docName, docID, specialization, patientName, patientID, date, time_slot, symptoms, address, fees } = req.body;
   const appointment = await Appointment({
+    docPfp,
+    patientPfp,
     docName, 
     docID, 
     specialization, 
@@ -145,7 +148,7 @@ const upcomingAppointments = async (req, res) => {
 
 //start an appointment
 const startAppointment = async (req, res) => {
-  const { docID, patientName, patientID, date, time_slot, symptoms } = req.body;
+  const { docID, patientName, patientID, date, time_slot, symptoms, patientPfp } = req.body;
   let currentAppointment = []
 
   await Doc.findById(docID, (err, docData) => {
@@ -162,6 +165,7 @@ const startAppointment = async (req, res) => {
   });
 
   const newAppointment = {
+    patientPfp,
     patientName,
     patientID,
     date,
@@ -235,6 +239,29 @@ const endAppointment = async (req, res) => {
   });
 }
 
+//update user pfp
+const updatePfp = async (req, res) => {
+  const { id, pfp } = req.body;
+  await User.findById(id, (err, user) => {
+    if(!user || err){
+      console.log(err);
+      res.json({ success: false, messsage: "error in finding user" });
+    }
+  });
+
+  await User.findByIdAndUpdate(id, { pfp }, (err, user) =>{
+    if(err){
+      console.log(err);
+      res.json({ success: false, message: "error in updating user" });
+    }
+    else{
+      console.log("user pfp updated");
+      res.json({ success: true, message: "pfp updated successfully", user });
+    }
+  })
+
+}
+
 
 module.exports = {
   createUser,
@@ -246,5 +273,6 @@ module.exports = {
   startAppointment,
   getDoctorBySpecialization,
   getAllDoctors,
-  endAppointment
+  endAppointment,
+  updatePfp
 };
