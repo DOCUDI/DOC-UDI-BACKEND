@@ -52,6 +52,7 @@ let DocSchema = mongoose.Schema({
   }],
   currentAppointment:[
     {
+      patientPfp: String,
       patientName: String,
       patientID: String,
       date: String,
