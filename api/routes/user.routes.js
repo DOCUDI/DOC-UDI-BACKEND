@@ -38,6 +38,9 @@ router.get("/get-docs", (req, res) => {
 router.post("/end-appointment", (req, res) => {
   userController.endAppointment(req, res);
 });
+router.post("/update-pfp", (req, res) => {
+  userController.updatePfp(req, res);
+});
 
 
 module.exports = router;

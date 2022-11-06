@@ -6,7 +6,7 @@ const { User, Doc, Appointment } = require("../models");
 const createDoc = async (req, res) => {
   console.log("in createDoc");
   const currentAppointment = [];
-  const { name, email, password, clinic_address, specialization, city, time_slots, consultation_fee, working_days } = req.body;
+  const { pfp, name, email, password, clinic_address, specialization, city, time_slots, consultation_fee, working_days } = req.body;
   const isNewUser = await Doc.isThisEmailInUse(email);
   if (!isNewUser)
     return res.json({
@@ -14,6 +14,7 @@ const createDoc = async (req, res) => {
       message: "This email is already in use, try sign-in",
     });
   const user = await Doc({
+    pfp,
     name,
     email,
     password,
@@ -91,7 +92,7 @@ const signOut = async (req, res) => {
 
 //to upload prescrition by doctor
 const uploadPrescription = async (req, res) => {
-  const { docID, patientID, docName, specialization, clinicAddress, patientName, date, time, fees, prescription } = req.body;
+  const { docPfp, docID, patientID, docName, specialization, clinicAddress, patientName, date, time, fees, prescription } = req.body;
 
   let medicalHistory = [];
   await User.findById(patientID, (err, userData) => {
@@ -106,6 +107,7 @@ const uploadPrescription = async (req, res) => {
   });
 
   const newPrescription = {
+    docPfp: docPfp,
     docName: docName,
     specialization: specialization,
     clinicAddress: clinicAddress,

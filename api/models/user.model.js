@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
   },
   medicalHistory: [
     {
+      docPfp: String,
       docName: String,
       specialization: String,
       clinicAddress: String,
