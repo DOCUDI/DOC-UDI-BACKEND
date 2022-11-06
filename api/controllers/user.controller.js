@@ -66,6 +66,7 @@ const userSignIn = async (req, res) => {
   const userInfo = {
     fullname: user.name,
     email: user.email,
+    pfp: user.pfp
   };
   const userID = user._id;
 
