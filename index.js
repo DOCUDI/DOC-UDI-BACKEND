@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const corsOptions = {
-  origin: "http://localhost:8002",
+  origin: "https://docudibackend.herokuapp.com",
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
